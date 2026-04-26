@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Growth Tracker</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f4; --bg3: #eeede8;
+    --text: #1a1a1a; --text2: #6b7280; --text3: #9ca3af;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --green: #1D9E75; --green-bg: #e1f5ee; --green-text: #085041;
+    --blue: #378ADD; --blue-bg: #e6f1fb; --blue-text: #0c447c;
+    --amber: #BA7517; --amber-bg: #faeeda; --amber-text: #633806;
+    --red: #E24B4A; --red-bg: #fcebeb; --red-text: #791f1f;
+    --warn-bg: #faeeda; --warn-text: #633806;
+    --info-bg: #e6f1fb; --info-text: #0c447c;
+    --success-bg: #e1f5ee; --success-text: #085041;
+    --danger-bg: #fcebeb; --danger-text: #791f1f;
+    --radius: 8px; --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1b; --bg2: #252523; --bg3: #2e2e2b;
+      --text: #f0ede8; --text2: #9ca3af; --text3: #6b7280;
+      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
+      --green-bg: #04342c; --green-text: #9fe1cb;
+      --blue-bg: #042c53; --blue-text: #b5d4f4;
+      --amber-bg: #412402; --amber-text: #fac775;
+      --red-bg: #501313; --red-text: #f7c1c1;
+      --warn-bg: #412402; --warn-text: #fac775;
+      --info-bg: #042c53; --info-text: #b5d4f4;
+      --success-bg: #04342c; --success-text: #9fe1cb;
+      --danger-bg: #501313; --danger-text: #f7c1c1;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; padding: 24px 16px; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .page-header { margin-bottom: 20px; }
+  .page-header h1 { font-size: 22px; font-weight: 500; color: var(--text); }
+  .page-header p { font-size: 13px; color: var(--text2); margin-top: 3px; }
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 16px; }
+  .settings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media(max-width:600px){ .settings-grid { grid-template-columns: 1fr 1fr; } }
+  .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  @media(max-width:500px){ .phase-grid { grid-template-columns: 1fr; } }
+  .phase-box { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; }
+  .phase-box h3 { font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; color: var(--text2); }
+  .field input[type=number], .field input[type=text] {
+    padding: 7px 10px; font-size: 13px; border: 0.5px solid var(--border2);
+    border-radius: var(--radius); background: var(--bg); color: var(--text);
+    width: 100%; transition: border-color 0.15s;
+  }
+  .field input:focus { outline: none; border-color: var(--blue); }
+  .slider-row { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+  .slider-row input[type=range] { flex: 1; accent-color: var(--green); cursor: pointer; }
+  .slider-val { font-size: 14px; font-weight: 500; color: var(--amber); min-width: 42px; }
+  .rate-amt { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  .mcards { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+  @media(max-width:600px){ .mcards { grid-template-columns: repeat(2,1fr); } }
+  .mc { background: var(--bg2); border-radius: var(--radius); padding: 12px 14px; }
+  .mc-l { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .mc-v { font-size: 19px; font-weight: 500; color: var(--text); }
+  .mc-v.g { color: var(--green); }
+  .mc-v.r { color: var(--red); }
+  .mc-v.b { color: var(--blue); }
+  .prog-wrap { margin-bottom: 16px; }
+  .prog-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .prog-bg { height: 7px; background: var(--bg2); border-radius: 4px; overflow: hidden; border: 0.5px solid var(--border); }
+  .prog-fill { height: 7px; border-radius: 4px; background: var(--green); transition: width 0.35s; }
+  .chart-section { margin-bottom: 16px; }
+  .legend { display: flex; gap: 14px; font-size: 11px; color: var(--text2); margin-bottom: 8px; }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend-sq { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .legend-line { width: 10px; height: 2px; border-radius: 1px; display: inline-block; }
+  .chart-wrap { position: relative; width: 100%; height: 190px; }
+  .action-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .btn { padding: 8px 16px; font-size: 13px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); cursor: pointer; transition: background 0.15s; }
+  .btn:hover { background: var(--bg2); }
+  .btn.primary { color: var(--blue); border-color: #378ADD44; }
+  .btn.success { color: var(--green); border-color: #1D9E7544; }
+  .lock-msg { font-size: 12px; color: var(--green); }
+  .tbl-wrap { overflow-x: auto; border: 0.5px solid var(--border); border-radius: var(--radius-lg); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; min-width: 680px; }
+  thead tr { background: var(--bg2); }
+  th { padding: 9px 9px; text-align: left; font-size: 11px; font-weight: 500; color: var(--text2); border-bottom: 0.5px solid var(--border); white-space: nowrap; }
+  td { padding: 7px 9px; border-bottom: 0.5px solid var(--border); color: var(--text); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr.today-row td { background: var(--info-bg); }
+  tr.locked-row td { background: var(--success-bg); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+  .bs { background: var(--success-bg); color: var(--success-text); }
+  .bw { background: var(--warn-bg); color: var(--warn-text); }
+  .bi { background: var(--info-bg); color: var(--info-text); }
+  .bd { background: var(--danger-bg); color: var(--danger-text); }
+  .bg2 { background: var(--bg2); color: var(--text2); }
+  .inp { width: 100%; padding: 4px 7px; font-size: 12px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); }
+  .inp:focus { outline: none; border-color: var(--blue); }
+  .inp.loss { border-color: var(--red); }
+  .section-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <h1>Trading Growth Tracker</h1>
+    <p>Compound projection to your goal — adjust rates, log earnings, track daily progress</p>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Settings</p>
+    <div class="settings-grid">
+      <div class="field"><label>Starting capital (₹)</label><input type="number" id="startCap" value="24000" oninput="recalc()"></div>
+      <div class="field"><label>Goal capital (₹)</label><input type="number" id="goalCap" value="100000" oninput="recalc()"></div>
+      <div class="field"><label>Today's loss (₹)</label><input type="number" id="todayLoss" placeholder="0" oninput="recalc()"></div>
+    </div>
+    <div class="phase-grid">
+      <div class="phase-box">
+        <h3>Phase 1 — before goal</h3>
+        <div class="field"><label>Target rate</label></div>
+        <div class="slider-row">
+          <input type="range" min="0.5" max="30" step="0.5" value="5" id="r1slider" oninput="syncR1(this.value)">
+          <span class="slider-val" id="r1val">5.0%</span>
+        </div>
+        <div class="field" style="margin-top:8px;"><label>Or type exact %</label>
+          <input type="number" id="r1input" value="5" min="0.1" max="100" step="0.1" oninput="syncR1Input(this.value)">
+        </div>
+        <div class="rate-amt" id="r1amt"></div>
+      </div>
+      <div class="phase-box">
+        <h3>Phase 2 — after goal</h3>
+        <div class="field"><label>Target rate</label></div>
+        <div class="slider-row">
+          <input type="range" min="0.5" max="20" step="0.5" value="3" id="r2slider" oninput="syncR2(this.value)">
+          <span class="slider-val" id="r2val">3.0%</span>
+        </div>
+        <div class="field" style="margin-top:8px;"><label>Or type exact %</label>
+          <input type="number" id="r2input" value="3" min="0.1" max="100" step="0.1" oninput="syncR2Input(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:12px; max-width:200px;">
+      <label>Today's actual earning (₹)</label>
+      <input type="number" id="todayEarn" placeholder="e.g. 1920" oninput="recalc()">
+    </div>
+  </div>
+
+  <div class="mcards">
+    <div class="mc"><div class="mc-l">Current capital</div><div class="mc-v b" id="mc-cap">₹24,000</div></div>
+    <div class="mc"><div class="mc-l">Today's target</div><div class="mc-v g" id="mc-tgt">₹1,200</div></div>
+    <div class="mc"><div class="mc-l">Days to goal</div><div class="mc-v" id="mc-days">—</div></div>
+    <div class="mc"><div class="mc-l">Total gain</div><div class="mc-v g" id="mc-gain">₹0</div></div>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-meta"><span id="prog-label">Progress to ₹1,00,000</span><span id="prog-pct">0%</span></div>
+    <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="chart-section card" style="padding:14px 16px;">
+    <div class="legend">
+      <span><span class="legend-sq" style="background:#1D9E75"></span>Actual capital</span>
+      <span><span class="legend-line" style="background:#378ADD"></span>Target path</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="growthChart" role="img" aria-label="Capital growth chart showing actual vs target projection to goal">Capital growth chart.</canvas>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn success" onclick="lockToday()">Lock today &amp; advance</button>
+    <button class="btn primary" onclick="exportCSV()">Export CSV</button>
+    <span class="lock-msg" id="lock-msg"></span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:38px;">Day</th>
+          <th style="width:66px;">Date</th>
+          <th style="width:98px;">Opening ₹</th>
+          <th style="width:52px;">Rate</th>
+          <th style="width:98px;">Target profit</th>
+          <th style="width:100px;">Actual profit</th>
+          <th style="width:84px;">Loss (₹)</th>
+          <th style="width:98px;">Closing ₹</th>
+          <th style="width:82px;">Status</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+let lockedDays = [];
+let chart = null;
+function g(id){ return document.getElementById(id); }
+function getStart(){ return parseFloat(g('startCap').value)||24000; }
+function getGoal(){ return parseFloat(g('goalCap').value)||100000; }
+function getR1(){ return (parseFloat(g('r1input').value)||5)/100; }
+function getR2(){ return (parseFloat(g('r2input').value)||3)/100; }
+function getEarn(){ return parseFloat(g('todayEarn').value)||0; }
+function getLoss(){ return parseFloat(g('todayLoss').value)||0; }
+function syncR1(v){ g('r1input').value=v; g('r1val').textContent=parseFloat(v).toFixed(1)+'%'; recalc(); }
+function syncR1Input(v){ const n=Math.min(100,Math.max(0.1,parseFloat(v)||5)); g('r1slider').value=Math.min(30,n); g('r1val').textContent=n.toFixed(1)+'%'; recalc(); }
+function syncR2(v){ g('r2input').value=v; g('r2val').textContent=parseFloat(v).toFixed(1)+'%'; recalc(); }
+function syncR2Input(v){ const n=Math.min(100,Math.max(0.1,parseFloat(v)||3)); g('r2slider').value=Math.min(20,n); g('r2val').textContent=n.toFixed(1)+'%'; recalc(); }
+function rate(cap){ return cap < getGoal() ? getR1() : getR2(); }
+function fmt(n){ return '₹'+Math.round(n).toLocaleString('en-IN'); }
+function fmtR(r){ return (r*100).toFixed(1)+'%'; }
+function dateStr(offset){ const d=new Date(); d.setDate(d.getDate()+offset); return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); }
+function currentCap(){ let c=getStart(); for(const d of lockedDays) c+=((d.actual||0)-(d.loss||0)); return c; }
+function buildRows(){
+  const rows=[]; let cap=getStart(); const today=lockedDays.length;
+  for(const [i,d] of lockedDays.entries()){
+    const r=rate(cap),target=cap*r,closing=cap+(d.actual||0)-(d.loss||0);
+    rows.push({day:i+1,date:dateStr(i-today),opening:cap,rate:r,target,actual:d.actual,loss:d.loss||0,closing,locked:true});
+    cap=closing;
+  }
+  const earn=getEarn(),loss=getLoss(),r=rate(cap),target=cap*r,closing=cap+earn-loss;
+  rows.push({day:today+1,date:dateStr(0),opening:cap,rate:r,target,actual:earn||null,loss,closing,isToday:true});
+  let projCap=earn>0?closing:cap,dn=today+2,off=1;
+  while(projCap<getGoal()&&dn<today+200){
+    const pr=rate(projCap),pt=projCap*pr,pc=projCap+pt;
+    rows.push({day:dn,date:dateStr(off),opening:projCap,rate:pr,target:pt,actual:null,loss:0,closing:pc,isProjected:true});
+    projCap=pc; dn++; off++;
+  }
+  return rows;
+}
+function recalc(){
+  const cap=currentCap(); g('r1amt').textContent='Target: '+fmt(cap*getR1());
+  const rows=buildRows(); renderSummary(rows,cap); renderProgress(cap); renderTable(rows); renderChart(rows);
+}
+function renderSummary(rows,cap){
+  const r=rate(cap),tgt=cap*r;
+  g('mc-cap').textContent=fmt(cap); g('mc-tgt').textContent=fmt(tgt);
+  const proj=rows.filter(r=>r.isProjected).length;
+  g('mc-days').textContent=proj+(proj===1?' day':' days');
+  let gain=0; for(const d of lockedDays) gain+=(d.actual||0)-(d.loss||0);
+  gain+=getEarn()-getLoss();
+  const ge=g('mc-gain'); ge.textContent=(gain>=0?'+':'')+fmt(gain); ge.className='mc-v '+(gain>=0?'g':'r');
+}
+function renderProgress(cap){
+  const start=getStart(),goal=getGoal(),eff=cap+getEarn()-getLoss();
+  const pct=Math.min(100,Math.max(0,Math.round((eff-start)/(goal-start)*100)));
+  g('prog-fill').style.width=pct+'%'; g('prog-pct').textContent=pct+'%';
+  g('prog-label').textContent='Progress to '+fmt(goal);
+}
+function renderTable(rows){
+  const tbody=g('tbody'); tbody.innerHTML='';
+  rows.forEach(row=>{
+    const tr=document.createElement('tr');
+    if(row.isToday) tr.className='today-row';
+    else if(row.locked) tr.className='locked-row';
+    const ap=row.actual,net=ap!==null?ap-row.loss:null;
+    let badge,bc;
+    if(row.isProjected){badge='Projected';bc='bg2';}
+    else if(row.isToday&&ap===null){badge='Today';bc='bi';}
+    else if(net===null){badge='—';bc='bg2';}
+    else if(net>=row.target){badge='Target met';bc='bs';}
+    else if(net>0){badge='Partial';bc='bw';}
+    else if(net<0){badge='Loss day';bc='bd';}
+    else{badge='Breakeven';bc='bg2';}
+    const closing=ap!==null?fmt(row.closing):fmt(row.opening);
+    tr.innerHTML=`<td style="font-weight:500;">${row.day}</td>
+<td style="font-size:11px;color:var(--text2);">${row.date}</td>
+<td>${fmt(row.opening)}</td>
+<td><span class="badge ${row.rate===getR1()?'bw':'bs'}">${fmtR(row.rate)}</span></td>
+<td style="color:var(--green);font-weight:500;">${fmt(row.target)}</td>
+<td>${row.isToday&&!row.locked?`<input class="inp" type="number" placeholder="Enter profit" value="${ap||''}" oninput="g('todayEarn').value=this.value;recalc();">`:ap!==null?fmt(ap):'<span style="color:var(--text2)">—</span>'}</td>
+<td>${row.isToday&&!row.locked?`<input class="inp loss" type="number" placeholder="0" value="${row.loss||''}" oninput="g('todayLoss').value=this.value;recalc();">`:row.loss>0?`<span style="color:var(--red)">-${fmt(row.loss)}</span>`:'—'}</td>
+<td style="font-weight:500;">${closing}</td>
+<td><span class="badge ${bc}">${badge}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function renderChart(rows){
+  const labels=rows.map(r=>'D'+r.day);
+  const actual=rows.map(r=>r.locked?r.closing:(r.isToday&&r.actual!==null?r.closing:null));
+  const target=rows.map(r=>r.closing);
+  if(chart) chart.destroy();
+  const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+  chart=new Chart(g('growthChart').getContext('2d'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Actual',data:actual,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.3,pointRadius:3,pointBackgroundColor:'#1D9E75',borderWidth:2,spanGaps:false},
+      {label:'Path',data:target,borderColor:'#378ADD',borderDash:[4,4],backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:2,pointBackgroundColor:'#378ADD',borderWidth:1.5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'₹'+Math.round(c.parsed.y).toLocaleString('en-IN')}}},
+      scales:{
+        y:{ticks:{callback:v=>'₹'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:10},color:isDark?'#9ca3af':'#888'},grid:{color:isDark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)'}},
+        x:{ticks:{font:{size:10},color:isDark?'#9ca3af':'#888',maxTicksLimit:14},grid:{display:false}}
+      }
+    }
+  });
+}
+function lockToday(){
+  const earn=getEarn(),loss=getLoss();
+  lockedDays.push({actual:earn,loss});
+  g('todayEarn').value=''; g('todayLoss').value='';
+  g('lock-msg').textContent='Day '+lockedDays.length+' locked!';
+  setTimeout(()=>g('lock-msg').textContent='',2500);
+  recalc();
+}
+function exportCSV(){
+  const rows=buildRows();
+  const lines=[['Day','Date','Opening','Rate %','Target Profit','Actual Profit','Loss','Closing','Type'].join(',')];
+  rows.forEach(r=>{
+    const type=r.locked?'Locked':r.isToday?'Today':'Projected';
+    lines.push([r.day,r.date,Math.round(r.opening),(r.rate*100).toFixed(1),Math.round(r.target),r.actual!==null?Math.round(r.actual):'',Math.round(r.loss),Math.round(r.closing),type].join(','));
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));
+  a.download='trading_tracker.csv'; a.click();
+}
+recalc();
+</script>
+</body>
+</html>
