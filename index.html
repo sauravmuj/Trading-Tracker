@@ -12,7 +12,7 @@
   --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
   --green:#1D9E75;--green-bg:#e1f5ee;--green-text:#085041;--green-bd:rgba(29,158,117,0.35);
   --blue:#378ADD;--blue-bg:#e6f1fb;--blue-text:#0c447c;--blue-bd:rgba(55,138,221,0.35);
-  --amber:#BA7517;--amber-bg:#faeeda;--amber-text:#633806;
+  --amber:#BA7517;--amber-bg:#faeeda;--amber-text:#633806;--amber-bd:rgba(186,117,23,0.35);
   --red:#E24B4A;--red-bg:#fcebeb;--red-text:#791f1f;--red-bd:rgba(226,75,74,0.35);
   --radius:8px;--radius-lg:12px;
 }
@@ -25,11 +25,11 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:0 0 40px;}
 .container{max-width:980px;margin:0 auto;padding:0 16px;}
 
-/* TICKER */
+/* ── TICKER ── */
 .ticker-bar{background:var(--bg);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;}
 .ticker-inner{max-width:980px;margin:0 auto;padding:0 16px;}
 .status-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0 6px;flex-wrap:wrap;gap:8px;}
-.mkt-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:500;transition:all 0.3s;}
+.mkt-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:500;}
 .mkt-badge.open{background:var(--green-bg);color:var(--green-text);}
 .mkt-badge.closed{background:var(--red-bg);color:var(--red-text);}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
@@ -41,17 +41,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ref-btn:hover{background:var(--bg2);}
 .idx-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding-bottom:10px;}
 @media(max-width:640px){.idx-grid{grid-template-columns:repeat(2,1fr);}}
-.idx-card{background:var(--bg2);border-radius:var(--radius);padding:9px 11px;border:0.5px solid var(--border);min-height:68px;}
-.idx-card.loading{opacity:0.6;}
-.idx-name{font-size:10px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px;}
-.idx-price{font-size:15px;font-weight:500;color:var(--text);line-height:1.2;}
+.idx-card{background:var(--bg2);border-radius:var(--radius);padding:9px 11px;border:0.5px solid var(--border);min-height:66px;}
+.idx-name{font-size:10px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;}
+.idx-price{font-size:14px;font-weight:500;color:var(--text);}
 .idx-chg{font-size:11px;font-weight:500;margin-top:2px;}
-.idx-chg.up{color:var(--green);}
-.idx-chg.dn{color:var(--red);}
-.idx-chg.flat{color:var(--text2);}
-.idx-src{font-size:10px;color:var(--text2);margin-top:2px;opacity:0.7;}
+.idx-chg.up{color:var(--green);}.idx-chg.dn{color:var(--red);}.idx-chg.flat{color:var(--text2);}
+.idx-src{font-size:10px;margin-top:2px;}
 
-/* PAGE */
+/* ── PAGE ── */
 .page-hdr{padding:18px 0 0;}
 .page-hdr h1{font-size:22px;font-weight:500;margin-bottom:2px;}
 .page-hdr p{font-size:13px;color:var(--text2);margin-bottom:16px;}
@@ -70,9 +67,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .srow input[type=range]{flex:1;accent-color:var(--green);cursor:pointer;}
 .sv{font-size:14px;font-weight:500;color:var(--amber);min-width:44px;}
 .rhint{font-size:11px;color:var(--text2);margin-top:4px;}
-.tgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end;}
-@media(max-width:600px){.tgrid{grid-template-columns:1fr 1fr;}}
+
+.today-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end;}
+@media(max-width:600px){.today-grid{grid-template-columns:1fr 1fr;}}
 .netbox{padding:7px 10px;font-size:15px;font-weight:500;border-radius:var(--radius);background:var(--bg2);border:0.5px solid var(--border);}
+.breakdown{font-size:11px;color:var(--text2);margin-top:10px;padding:8px 11px;background:var(--bg2);border-radius:var(--radius);line-height:1.6;}
+
 .banner{border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .banner.profit{background:var(--green-bg);border:0.5px solid var(--green-bd);}
 .banner.loss{background:var(--red-bg);border:0.5px solid var(--red-bd);}
@@ -80,51 +80,58 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .blabel{font-size:13px;font-weight:500;margin-bottom:3px;}
 .blabel.g{color:var(--green-text);}.blabel.r{color:var(--red-text);}.blabel.n{color:var(--text2);}
 .bdetail{font-size:12px;color:var(--text2);}
-.bval{font-size:22px;font-weight:500;white-space:nowrap;}
+.bval{font-size:21px;font-weight:500;white-space:nowrap;}
 .bval.g{color:var(--green);}.bval.r{color:var(--red);}.bval.n{color:var(--text2);}
+
 .mcards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
 @media(max-width:600px){.mcards{grid-template-columns:repeat(2,1fr);}}
 .mc{background:var(--bg2);border-radius:var(--radius);padding:12px 14px;}
 .mc-l{font-size:11px;color:var(--text2);margin-bottom:4px;}
-.mc-v{font-size:19px;font-weight:500;}
+.mc-v{font-size:18px;font-weight:500;}
 .mc-v.g{color:var(--green);}.mc-v.r{color:var(--red);}.mc-v.b{color:var(--blue);}.mc-v.d{color:var(--text);}
+
 .pmeta{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:5px;}
 .pbg{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;border:0.5px solid var(--border);margin-bottom:16px;}
 .pfill{height:7px;border-radius:4px;background:var(--green);transition:width 0.35s;}
+
 .legend{display:flex;gap:14px;font-size:11px;color:var(--text2);margin-bottom:8px;}
 .cwrap{position:relative;width:100%;height:200px;margin-bottom:16px;}
+
 .abar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
 .btn{padding:8px 16px;font-size:13px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);cursor:pointer;}
 .btn:hover{background:var(--bg2);}
 .btn.ok{color:var(--green);border-color:var(--green-bd);}
 .btn.ex{color:var(--blue);border-color:var(--blue-bd);}
 .lmsg{font-size:12px;color:var(--green);}
+
 .twrap{overflow-x:auto;border:0.5px solid var(--border);border-radius:var(--radius-lg);}
-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;min-width:740px;}
+table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;min-width:860px;}
 thead tr{background:var(--bg2);}
-th{padding:9px;text-align:left;font-size:11px;font-weight:500;color:var(--text2);border-bottom:0.5px solid var(--border);white-space:nowrap;}
-td{padding:7px 9px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle;}
+th{padding:9px 8px;text-align:left;font-size:11px;font-weight:500;color:var(--text2);border-bottom:0.5px solid var(--border);white-space:nowrap;}
+td{padding:7px 8px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-tr.tok td{background:var(--green-bg);}tr.ttoday td{background:var(--blue-bg);}tr.tloss td{background:var(--red-bg);}
+tr.tok td{background:var(--green-bg);}
+tr.ttoday td{background:var(--blue-bg);}
+tr.tloss td{background:var(--red-bg);}
 .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;}
-.bs{background:var(--green-bg);color:var(--green-text);}.bw{background:var(--amber-bg);color:var(--amber-text);}
-.bi{background:var(--blue-bg);color:var(--blue-text);}.bd{background:var(--red-bg);color:var(--red-text);}
+.bs{background:var(--green-bg);color:var(--green-text);}
+.bw{background:var(--amber-bg);color:var(--amber-text);}
+.bi{background:var(--blue-bg);color:var(--blue-text);}
+.bd{background:var(--red-bg);color:var(--red-text);}
 .bn{background:var(--bg2);color:var(--text2);}
 .inp{width:100%;padding:4px 7px;font-size:12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);}
-.inp.loss{border-color:var(--red);}
+.inp.loss-inp{border-color:var(--red);}
+.inp.brok-inp{border-color:var(--amber);}
 </style>
 </head>
 <body>
 
-<!-- ══ LIVE TICKER ══ -->
+<!-- TICKER -->
 <div class="ticker-bar">
   <div class="ticker-inner">
     <div class="status-row">
       <div style="display:flex;align-items:center;gap:10px;">
-        <span class="mkt-badge closed" id="mktBadge">
-          <span class="dot"></span>
-          <span id="mktTxt">Checking...</span>
-        </span>
+        <span class="mkt-badge closed" id="mktBadge"><span class="dot"></span><span id="mktTxt">Checking...</span></span>
         <span class="upd" id="updTxt"></span>
       </div>
       <button class="ref-btn" onclick="fetchAll()">↻ Refresh</button>
@@ -133,11 +140,11 @@ tr.tok td{background:var(--green-bg);}tr.ttoday td{background:var(--blue-bg);}tr
   </div>
 </div>
 
-<!-- ══ APP ══ -->
+<!-- APP -->
 <div class="container">
   <div class="page-hdr">
     <h1>Trading Growth Tracker</h1>
-    <p>Profit adds · Loss deducts · Next day opening always reflects real closing capital</p>
+    <p>Net P&amp;L and % shown after brokerage · Loss reduces next day's capital · Profit compounds daily</p>
   </div>
 
   <div class="card">
@@ -164,15 +171,26 @@ tr.tok td{background:var(--green-bg);}tr.ttoday td{background:var(--blue-bg);}tr
 
   <div class="card">
     <div class="ct">Today's trading result</div>
-    <div class="tgrid">
-      <div class="field"><label>Profit earned today (₹)</label><input type="number" id="todayProfit" placeholder="e.g. 1500" min="0" oninput="recalc()"></div>
-      <div class="field"><label>Loss incurred today (₹)</label><input type="number" id="todayLoss" placeholder="e.g. 300" min="0" oninput="recalc()"></div>
-      <div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;">Net P&amp;L today</label><div class="netbox" id="netbox">₹0</div></div>
+    <div class="today-grid">
+      <div class="field"><label>Gross profit (₹)</label><input type="number" id="todayProfit" placeholder="e.g. 1500" min="0" oninput="recalc()"></div>
+      <div class="field"><label>Loss (₹)</label><input type="number" id="todayLoss" placeholder="e.g. 300" min="0" oninput="recalc()"></div>
+      <div class="field">
+        <label style="display:flex;align-items:center;gap:5px;">
+          Brokerage (₹)
+          <span style="font-size:10px;background:var(--amber-bg);color:var(--amber-text);padding:1px 6px;border-radius:999px;font-weight:500;">enter manually</span>
+        </label>
+        <input type="number" id="todayBrok" placeholder="e.g. 40" min="0" step="0.01" oninput="recalc()">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;">Net after brokerage</label>
+        <div class="netbox" id="netbox">₹0</div>
+      </div>
     </div>
+    <div class="breakdown" id="breakdown" style="display:none;"></div>
   </div>
 
   <div class="banner neutral" id="banner">
-    <div><div class="blabel n" id="blabel">Enter today's profit or loss above</div><div class="bdetail" id="bdetail"></div></div>
+    <div><div class="blabel n" id="blabel">Enter today's figures above</div><div class="bdetail" id="bdetail"></div></div>
     <div class="bval n" id="bval">—</div>
   </div>
 
@@ -180,14 +198,14 @@ tr.tok td{background:var(--green-bg);}tr.ttoday td{background:var(--blue-bg);}tr
     <div class="mc"><div class="mc-l">Current capital</div><div class="mc-v b" id="mc-cap">₹24,000</div></div>
     <div class="mc"><div class="mc-l">Today's target</div><div class="mc-v g" id="mc-tgt">₹1,200</div></div>
     <div class="mc"><div class="mc-l">Days to goal</div><div class="mc-v d" id="mc-days">—</div></div>
-    <div class="mc"><div class="mc-l">Total P&amp;L</div><div class="mc-v g" id="mc-pnl">₹0</div></div>
+    <div class="mc"><div class="mc-l">Total net P&amp;L</div><div class="mc-v g" id="mc-pnl">₹0</div></div>
   </div>
 
   <div class="pmeta"><span id="plabel">Progress to ₹1,00,000</span><span id="ppct">0%</span></div>
   <div class="pbg"><div class="pfill" id="pfill" style="width:0%"></div></div>
 
   <div class="legend">
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:#1D9E75;display:inline-block;"></span>Actual</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:#1D9E75;display:inline-block;"></span>Actual (net of brokerage)</span>
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:2px;border-radius:1px;background:#378ADD;display:inline-block;vertical-align:middle;"></span>Target path</span>
   </div>
   <div class="cwrap"><canvas id="gc" role="img" aria-label="Capital growth chart">Capital growth.</canvas></div>
@@ -201,10 +219,18 @@ tr.tok td{background:var(--green-bg);}tr.ttoday td{background:var(--blue-bg);}tr
   <div class="twrap">
     <table>
       <thead><tr>
-        <th style="width:36px;">Day</th><th style="width:62px;">Date</th><th style="width:90px;">Opening ₹</th>
-        <th style="width:46px;">Rate</th><th style="width:90px;">Target</th>
-        <th style="width:80px;">Profit</th><th style="width:80px;">Loss</th><th style="width:80px;">Net</th>
-        <th style="width:90px;">Closing ₹</th><th style="width:76px;">Status</th>
+        <th style="width:34px;">Day</th>
+        <th style="width:58px;">Date</th>
+        <th style="width:84px;">Opening ₹</th>
+        <th style="width:44px;">Rate</th>
+        <th style="width:84px;">Target</th>
+        <th style="width:76px;">Gross P</th>
+        <th style="width:66px;">Loss</th>
+        <th style="width:72px;">Brokerage</th>
+        <th style="width:84px;">Net P&amp;L</th>
+        <th style="width:56px;">Net %</th>
+        <th style="width:84px;">Closing ₹</th>
+        <th style="width:68px;">Status</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -212,163 +238,104 @@ tr.tok td{background:var(--green-bg);}tr.ttoday td{background:var(--blue-bg);}tr
 </div>
 
 <script>
-/* ════════════════════════════════════
-   MARKET DATA
-════════════════════════════════════ */
-
-// Fallback last-known closing prices (updated Apr 2026 — shown when live fetch fails)
-const FALLBACK = {
-  '^NSEI':               { price: 24125.55, prev: 23851.65 },
-  '^BSESN':              { price: 79218.10, prev: 78553.20 },
-  '^NSEBANK':            { price: 52340.80, prev: 51987.30 },
-  'NIFTY_FIN_SERVICE.NS':{ price: 23412.60, prev: 23105.40 },
-  '^CNXIT':              { price: 35890.25, prev: 35440.10 },
+/* ── MARKET DATA ── */
+const FALLBACK={
+  '^NSEI':               {price:24125.55,prev:23851.65},
+  '^BSESN':              {price:79218.10,prev:78553.20},
+  '^NSEBANK':            {price:52340.80,prev:51987.30},
+  'NIFTY_FIN_SERVICE.NS':{price:23412.60,prev:23105.40},
+  '^CNXIT':              {price:35890.25,prev:35440.10},
 };
-
-const INDICES = [
-  { sym:'^NSEI',                label:'NIFTY 50'   },
-  { sym:'^BSESN',               label:'SENSEX (BSE)'},
-  { sym:'^NSEBANK',             label:'BANK NIFTY' },
-  { sym:'NIFTY_FIN_SERVICE.NS', label:'FIN NIFTY'  },
-  { sym:'^CNXIT',               label:'NIFTY IT'   },
+const INDICES=[
+  {sym:'^NSEI',label:'NIFTY 50'},
+  {sym:'^BSESN',label:'SENSEX (BSE)'},
+  {sym:'^NSEBANK',label:'BANK NIFTY'},
+  {sym:'NIFTY_FIN_SERVICE.NS',label:'FIN NIFTY'},
+  {sym:'^CNXIT',label:'NIFTY IT'},
 ];
 
-// Build index cards immediately with fallback so nothing says "Unavailable"
 function buildCards(){
-  const grid = document.getElementById('idxGrid');
-  grid.innerHTML = '';
-  INDICES.forEach(idx => {
-    const d = FALLBACK[idx.sym];
-    const chg = d.price - d.prev;
-    const pct = chg/d.prev*100;
-    const dir = chg>0?'up':(chg<0?'dn':'flat');
-    const arr = chg>0?'▲':(chg<0?'▼':'—');
-    const div = document.createElement('div');
-    div.className = 'idx-card';
-    div.id = 'card-'+idx.sym.replace(/[^a-zA-Z0-9]/g,'_');
-    div.innerHTML = `
-      <div class="idx-name">${idx.label}</div>
-      <div class="idx-price">${d.price.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-      <div class="idx-chg ${dir}">${arr} ${Math.abs(chg).toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)</div>
-      <div class="idx-src" id="src-${idx.sym.replace(/[^a-zA-Z0-9]/g,'_')}">Last close</div>`;
+  const grid=document.getElementById('idxGrid'); grid.innerHTML='';
+  INDICES.forEach(idx=>{
+    const d=FALLBACK[idx.sym], chg=d.price-d.prev, pct=chg/d.prev*100;
+    const dir=chg>0?'up':(chg<0?'dn':'flat'), arr=chg>0?'▲':(chg<0?'▼':'—');
+    const div=document.createElement('div'); div.className='idx-card';
+    div.id='card-'+idx.sym.replace(/[^a-zA-Z0-9]/g,'_');
+    div.innerHTML=`<div class="idx-name">${idx.label}</div>
+<div class="idx-price">${d.price.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+<div class="idx-chg ${dir}">${arr} ${Math.abs(chg).toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)</div>
+<div class="idx-src" style="font-size:10px;color:var(--text2);">Last close</div>`;
     grid.appendChild(div);
   });
 }
 
 function isMarketOpen(){
-  const ist = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
-  const day = ist.getDay();
-  if(day===0||day===6) return false;
-  const t = ist.getHours()*60+ist.getMinutes();
-  return t>=555 && t<=930;
+  const ist=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+  const day=ist.getDay(); if(day===0||day===6) return false;
+  const t=ist.getHours()*60+ist.getMinutes(); return t>=555&&t<=930;
 }
-
 function setMarketBadge(){
-  const open = isMarketOpen();
-  const badge = document.getElementById('mktBadge');
-  badge.className = 'mkt-badge '+(open?'open':'closed');
-  document.getElementById('mktTxt').textContent = open?'Market Open':'Market Closed';
+  const open=isMarketOpen(), badge=document.getElementById('mktBadge');
+  badge.className='mkt-badge '+(open?'open':'closed');
+  document.getElementById('mktTxt').textContent=open?'Market Open':'Market Closed';
 }
 
-// Try multiple proxies in sequence
 async function fetchViaProxy(url){
-  const proxies = [
-    u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
-    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  const proxies=[
+    u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+    u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
   ];
   for(const proxy of proxies){
     try{
-      const res = await fetch(proxy(url), {signal: AbortSignal.timeout(6000)});
+      const res=await fetch(proxy(url),{signal:AbortSignal.timeout(6000)});
       if(!res.ok) continue;
-      const text = await res.text();
-      if(text && text.length > 10) return text;
-    }catch(e){ continue; }
+      const text=await res.text();
+      if(text&&text.length>10) return text;
+    }catch(e){continue;}
   }
   return null;
 }
 
 async function fetchIndex(sym){
-  // Try direct first (works on some networks / Vercel deployments with relaxed CORS)
-  const yUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d`;
-  let json = null;
-  try{
-    const res = await fetch(yUrl, {signal: AbortSignal.timeout(5000), headers:{'Accept':'application/json'}});
-    if(res.ok){ json = await res.json(); }
-  }catch(e){}
-
-  // Fallback: try via proxy
-  if(!json){
-    const text = await fetchViaProxy(yUrl);
-    if(text){ try{ json = JSON.parse(text); }catch(e){} }
-  }
-
-  if(!json) return null;
-  try{
-    const meta = json.chart.result[0].meta;
-    return {
-      price: meta.regularMarketPrice ?? meta.chartPreviousClose,
-      prev:  meta.chartPreviousClose ?? meta.previousClose,
-      live:  true,
-    };
-  }catch(e){ return null; }
+  const yUrl=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d`;
+  let json=null;
+  try{const res=await fetch(yUrl,{signal:AbortSignal.timeout(5000)});if(res.ok)json=await res.json();}catch(e){}
+  if(!json){const text=await fetchViaProxy(yUrl);if(text)try{json=JSON.parse(text);}catch(e){}}
+  if(!json)return null;
+  try{const meta=json.chart.result[0].meta;return{price:meta.regularMarketPrice??meta.chartPreviousClose,prev:meta.chartPreviousClose??meta.previousClose,live:true};}catch(e){return null;}
 }
 
-function updateCard(sym, data, live){
-  const key = sym.replace(/[^a-zA-Z0-9]/g,'_');
-  const card = document.getElementById('card-'+key);
-  const srcEl = document.getElementById('src-'+key);
-  if(!card) return;
-  const chg = data.price - data.prev;
-  const pct = chg/data.prev*100;
-  const dir = chg>0?'up':(chg<0?'dn':'flat');
-  const arr = chg>0?'▲':(chg<0?'▼':'—');
-  const idx = INDICES.find(i=>i.sym===sym);
-  card.innerHTML = `
-    <div class="idx-name">${idx?idx.label:sym}</div>
-    <div class="idx-price">${data.price.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-    <div class="idx-chg ${dir}">${arr} ${Math.abs(chg).toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)</div>
-    <div class="idx-src" style="color:${live?'var(--green-text)':'var(--text2)'};">${live?'Live':'Last close'}</div>`;
+function updateCard(sym,data,live){
+  const key=sym.replace(/[^a-zA-Z0-9]/g,'_');
+  const card=document.getElementById('card-'+key); if(!card)return;
+  const chg=data.price-data.prev, pct=chg/data.prev*100;
+  const dir=chg>0?'up':(chg<0?'dn':'flat'), arr=chg>0?'▲':(chg<0?'▼':'—');
+  const idx=INDICES.find(i=>i.sym===sym);
+  card.innerHTML=`<div class="idx-name">${idx?idx.label:sym}</div>
+<div class="idx-price">${data.price.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+<div class="idx-chg ${dir}">${arr} ${Math.abs(chg).toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)</div>
+<div class="idx-src" style="font-size:10px;color:${live?'var(--green-text)':'var(--text2)'};">${live?'Live':'Last close'}</div>`;
 }
 
 async function fetchAll(){
   setMarketBadge();
-  document.getElementById('updTxt').textContent = 'Fetching live data...';
-  let liveCount = 0;
-
-  await Promise.allSettled(INDICES.map(async idx => {
-    const result = await fetchIndex(idx.sym);
-    if(result){
-      FALLBACK[idx.sym] = result; // cache the fresh value
-      updateCard(idx.sym, result, true);
-      liveCount++;
-    } else {
-      // show fallback with clear label
-      updateCard(idx.sym, FALLBACK[idx.sym], false);
-    }
+  document.getElementById('updTxt').textContent='Fetching...';
+  let live=0;
+  await Promise.allSettled(INDICES.map(async idx=>{
+    const r=await fetchIndex(idx.sym);
+    if(r){FALLBACK[idx.sym]=r;updateCard(idx.sym,r,true);live++;}
+    else updateCard(idx.sym,FALLBACK[idx.sym],false);
   }));
-
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Asia/Kolkata'});
-  document.getElementById('updTxt').textContent = liveCount>0
-    ? `Live · ${liveCount}/5 updated ${timeStr} IST`
-    : `Showing last close · ${timeStr} IST`;
+  const t=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Asia/Kolkata'});
+  document.getElementById('updTxt').textContent=live>0?`Live · ${live}/5 · ${t} IST`:`Last close · ${t} IST`;
 }
 
-function scheduleRefresh(){
-  const delay = isMarketOpen()?60000:300000;
-  setTimeout(()=>{ fetchAll(); scheduleRefresh(); }, delay);
-}
+function scheduleRefresh(){const delay=isMarketOpen()?60000:300000;setTimeout(()=>{fetchAll();scheduleRefresh();},delay);}
+buildCards();setMarketBadge();document.getElementById('updTxt').textContent='Showing last close — fetching live...';
+fetchAll();scheduleRefresh();
 
-buildCards(); // instant render with fallback
-setMarketBadge();
-document.getElementById('updTxt').textContent = 'Showing last close — fetching live...';
-fetchAll();
-scheduleRefresh();
-
-/* ════════════════════════════════════
-   TRACKER
-════════════════════════════════════ */
+/* ── TRACKER ── */
 let locked=[],chart=null;
 const g=id=>document.getElementById(id);
 const getStart=()=>parseFloat(g('startCap').value)||24000;
@@ -377,7 +344,8 @@ const getR1=()=>(parseFloat(g('r1i').value)||5)/100;
 const getR2=()=>(parseFloat(g('r2i').value)||3)/100;
 const getProfit=()=>Math.max(0,parseFloat(g('todayProfit').value)||0);
 const getLoss=()=>Math.max(0,parseFloat(g('todayLoss').value)||0);
-const rate=cap=>cap<getGoal()?getR1():getR2();
+const getBrok=()=>Math.max(0,parseFloat(g('todayBrok').value)||0);
+const rateFor=cap=>cap<getGoal()?getR1():getR2();
 const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
 const fmtR=r=>(r*100).toFixed(1)+'%';
 const dStr=off=>{const d=new Date();d.setDate(d.getDate()+off);return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});};
@@ -390,59 +358,50 @@ function ir2(v){const n=Math.min(100,Math.max(0.1,parseFloat(v)||3));g('r2s').va
 function currentCap(){let c=getStart();for(const d of locked)c+=d.net;return c;}
 
 function buildRows(){
-  const rows=[];let cap=getStart();const ti=locked.length;
+  const rows=[];let cap=getStart();const today=locked.length;
   for(const[i,d]of locked.entries()){
-    const r=rate(cap),target=cap*r,closing=cap+d.net;
-    rows.push({day:i+1,date:dStr(i-ti),opening:cap,rate:r,target,profit:d.profit,loss:d.loss,net:d.net,closing,locked:true});
+    const r=rateFor(cap),target=cap*r,closing=cap+d.net,netPct=cap>0?d.net/cap*100:0;
+    rows.push({day:i+1,date:dStr(i-today),opening:cap,rate:r,target,grossProfit:d.grossProfit,loss:d.loss,brokerage:d.brokerage,net:d.net,netPct,closing,locked:true});
     cap=closing;
   }
-  const profit=getProfit(),loss=getLoss(),net=profit-loss,ht=profit>0||loss>0;
-  const r=rate(cap),target=cap*r;
-  rows.push({day:ti+1,date:dStr(0),opening:cap,rate:r,target,profit:ht?profit:null,loss:ht?loss:null,net:ht?net:null,closing:ht?cap+net:cap,isToday:true});
-  let pc=ht?cap+net:cap,dn=ti+2,off=1;
-  while(pc<getGoal()&&dn<ti+200){
-    const pr=rate(pc),pt=pc*pr,cl=pc+pt;
-    rows.push({day:dn,date:dStr(off),opening:pc,rate:pr,target:pt,profit:null,loss:null,net:pt,closing:cl,isProjected:true});
-    pc=cl;dn++;off++;
+  const gross=getProfit(),loss=getLoss(),brok=getBrok(),ht=gross>0||loss>0||brok>0;
+  const net=gross-loss-brok,r=rateFor(cap),target=cap*r,netPct=ht&&cap>0?net/cap*100:0;
+  rows.push({day:today+1,date:dStr(0),opening:cap,rate:r,target,grossProfit:ht?gross:null,loss:ht?loss:null,brokerage:ht?brok:null,net:ht?net:null,netPct:ht?netPct:null,closing:ht?cap+net:cap,isToday:true});
+  let projCap=ht?cap+net:cap,dn=today+2,off=1;
+  while(projCap<getGoal()&&dn<today+200){
+    const pr=rateFor(projCap),pt=projCap*pr,pc=projCap+pt,pp=projCap>0?pt/projCap*100:0;
+    rows.push({day:dn,date:dStr(off),opening:projCap,rate:pr,target:pt,grossProfit:null,loss:null,brokerage:null,net:pt,netPct:pp,closing:pc,isProjected:true});
+    projCap=pc;dn++;off++;
   }
   return rows;
 }
 
 function recalc(){
-  const cap=currentCap(),profit=getProfit(),loss=getLoss(),net=profit-loss,ht=profit>0||loss>0;
-  const r=rate(cap),target=cap*r;
+  const cap=currentCap(),gross=getProfit(),loss=getLoss(),brok=getBrok();
+  const ht=gross>0||loss>0||brok>0,net=gross-loss-brok;
+  const r=rateFor(cap),target=cap*r,netPct=ht&&cap>0?net/cap*100:0;
   g('r1hint').textContent='Target: '+fmt(cap*getR1());
   const nb=g('netbox');
-  if(ht){nb.textContent=(net>=0?'+':'')+fmt(net);nb.style.color=net>=0?'#1D9E75':'#E24B4A';}
+  if(ht){nb.textContent=(net>=0?'+':'')+fmt(net);nb.style.color=net>=0?'var(--green)':'var(--red)';}
   else{nb.textContent='₹0';nb.style.color='';}
-  const bn=g('banner'),bl=g('blabel'),bv=g('bval'),bd=g('bdetail');
+  const bd=g('breakdown');
   if(ht){
-    if(net>0){
-      bn.className='banner profit';bl.className='blabel g';bv.className='bval g';
-      bl.textContent=net>=target?'Target achieved today!':'Profit day — below target';
-      bv.textContent='+'+fmt(net);
-      bd.textContent=net>=target?'Earned '+fmt(net)+' — beat target of '+fmt(target)+' by '+fmt(net-target):'Earned '+fmt(net)+' — target was '+fmt(target)+', short by '+fmt(target-net);
-    }else if(net<0){
-      bn.className='banner loss';bl.className='blabel r';bv.className='bval r';
-      bl.textContent='Loss day — capital reduces tomorrow';bv.textContent=fmt(net);
-      bd.textContent='Lost '+fmt(Math.abs(net))+'. Tomorrow opens at '+fmt(cap+net)+' (was '+fmt(cap)+').';
-    }else{
-      bn.className='banner neutral';bl.className='blabel n';bv.className='bval n';
-      bl.textContent='Breakeven — capital unchanged';bv.textContent='₹0';bd.textContent='';
-    }
-  }else{
-    bn.className='banner neutral';bl.className='blabel n';bv.className='bval n';
-    bl.textContent='Enter today\'s profit or loss above';bv.textContent='—';bd.textContent='';
-  }
+    bd.style.display='block';
+    bd.textContent=`Gross ₹${gross.toLocaleString('en-IN')} − Loss ₹${loss.toLocaleString('en-IN')} − Brokerage ₹${brok.toFixed(2)} = Net ${net>=0?'+':''}₹${Math.abs(Math.round(net)).toLocaleString('en-IN')}  (${netPct>=0?'+':''}${netPct.toFixed(2)}% on ₹${Math.round(cap).toLocaleString('en-IN')})`;
+  }else{bd.style.display='none';}
+  const bn=g('banner'),bl=g('blabel'),bv=g('bval'),bdet=g('bdetail');
+  if(ht){
+    if(net>0){bn.className='banner profit';bl.className='blabel g';bv.className='bval g';bl.textContent=net>=target?'Target achieved!':'Profit day — below target';bv.textContent='+'+fmt(net)+' ('+netPct.toFixed(2)+'%)';bdet.textContent=net>=target?`Net ${fmt(net)} after brokerage — beat target of ${fmt(target)} by ${fmt(net-target)}`:`Net ${fmt(net)} after brokerage — target ${fmt(target)}, short by ${fmt(target-net)}`;}
+    else if(net<0){bn.className='banner loss';bl.className='blabel r';bv.className='bval r';bl.textContent='Loss day — capital reduces tomorrow';bv.textContent=fmt(net)+' ('+netPct.toFixed(2)+'%)';bdet.textContent=`Lost ${fmt(Math.abs(net))} after brokerage. Tomorrow opens at ${fmt(cap+net)}.`;}
+    else{bn.className='banner neutral';bl.className='blabel n';bv.className='bval n';bl.textContent='Breakeven';bv.textContent='₹0 (0.00%)';bdet.textContent='';}
+  }else{bn.className='banner neutral';bl.className='blabel n';bv.className='bval n';bl.textContent='Enter today\'s figures above';bv.textContent='—';bdet.textContent='';}
   const rows=buildRows();
   const eff=ht?cap+net:cap,pct=Math.min(100,Math.max(0,Math.round((eff-getStart())/(getGoal()-getStart())*100)));
   g('mc-cap').textContent=fmt(cap);g('mc-tgt').textContent=fmt(target);
-  const proj=rows.filter(r=>r.isProjected).length;
-  g('mc-days').textContent=proj+(proj===1?' day':' days');
+  const proj=rows.filter(r=>r.isProjected).length;g('mc-days').textContent=proj+(proj===1?' day':' days');
   let tp=0;for(const d of locked)tp+=d.net;if(ht)tp+=net;
   const pe=g('mc-pnl');pe.textContent=(tp>=0?'+':'')+fmt(tp);pe.className='mc-v '+(tp>=0?'g':'r');
-  g('pfill').style.width=pct+'%';g('ppct').textContent=pct+'%';
-  g('plabel').textContent='Progress to '+fmt(getGoal());
+  g('pfill').style.width=pct+'%';g('ppct').textContent=pct+'%';g('plabel').textContent='Progress to '+fmt(getGoal());
   renderTable(rows);renderChart(rows);
 }
 
@@ -450,11 +409,11 @@ function renderTable(rows){
   const tbody=g('tbody');tbody.innerHTML='';
   rows.forEach(row=>{
     const tr=document.createElement('tr');
-    if(row.isToday&&row.net!==null&&row.net<0)tr.className='tloss';
-    else if(row.isToday)tr.className='ttoday';
-    else if(row.locked&&row.net<0)tr.className='tloss';
-    else if(row.locked)tr.className='tok';
     const net=row.net;
+    if(row.isToday&&net!==null&&net<0)tr.className='tloss';
+    else if(row.isToday)tr.className='ttoday';
+    else if(row.locked&&net<0)tr.className='tloss';
+    else if(row.locked)tr.className='tok';
     let badge,bc;
     if(row.isProjected){badge='Projected';bc='bn';}
     else if(row.isToday&&net===null){badge='Today';bc='bi';}
@@ -463,21 +422,12 @@ function renderTable(rows){
     else if(net>0){badge='Partial';bc='bw';}
     else if(net<0){badge='Loss day';bc='bd';}
     else{badge='Breakeven';bc='bn';}
-    const pc=row.isToday&&!row.locked
-      ?`<input class="inp" type="number" placeholder="0" min="0" value="${row.profit!==null?Math.round(row.profit):''}" oninput="g('todayProfit').value=this.value;recalc();">`
-      :row.profit!==null&&row.profit>0?`<span style="color:#1D9E75;">+${fmt(row.profit)}</span>`:'—';
-    const lc=row.isToday&&!row.locked
-      ?`<input class="inp loss" type="number" placeholder="0" min="0" value="${row.loss!==null&&row.loss>0?Math.round(row.loss):''}" oninput="g('todayLoss').value=this.value;recalc();">`
-      :row.loss!==null&&row.loss>0?`<span style="color:#E24B4A;">-${fmt(row.loss)}</span>`:'—';
-    const nc=net!==null?`<span style="font-weight:500;color:${net>=0?'#1D9E75':'#E24B4A'};">${net>=0?'+':''}${fmt(net)}</span>`:'—';
-    tr.innerHTML=`<td style="font-weight:500;">${row.day}</td>
-<td style="font-size:11px;color:var(--text2);">${row.date}</td>
-<td>${fmt(row.opening)}</td>
-<td><span class="badge ${row.rate===getR1()?'bw':'bs'}">${fmtR(row.rate)}</span></td>
-<td style="color:#1D9E75;font-weight:500;">${fmt(row.target)}</td>
-<td>${pc}</td><td>${lc}</td><td>${nc}</td>
-<td style="font-weight:500;">${net!==null?fmt(row.closing):fmt(row.opening)}</td>
-<td><span class="badge ${bc}">${badge}</span></td>`;
+    const gpC=row.isToday&&!row.locked?`<input class="inp" type="number" placeholder="0" min="0" value="${row.grossProfit!==null?Math.round(row.grossProfit):''}" oninput="g('todayProfit').value=this.value;recalc();">`:row.grossProfit!==null&&row.grossProfit>0?`<span style="color:var(--green);">+${fmt(row.grossProfit)}</span>`:'—';
+    const lC=row.isToday&&!row.locked?`<input class="inp loss-inp" type="number" placeholder="0" min="0" value="${row.loss!==null&&row.loss>0?Math.round(row.loss):''}" oninput="g('todayLoss').value=this.value;recalc();">`:row.loss!==null&&row.loss>0?`<span style="color:var(--red);">-${fmt(row.loss)}</span>`:'—';
+    const bC=row.isToday&&!row.locked?`<input class="inp brok-inp" type="number" placeholder="0" min="0" step="0.01" value="${row.brokerage!==null&&row.brokerage>0?row.brokerage.toFixed(2):''}" oninput="g('todayBrok').value=this.value;recalc();">`:row.brokerage!==null&&row.brokerage>0?`<span style="color:var(--amber);">-₹${row.brokerage.toFixed(2)}</span>`:row.isProjected?'—':'₹0';
+    const nC=net!==null?`<span style="font-weight:500;color:${net>=0?'var(--green)':'var(--red)'};">${net>=0?'+':''}${fmt(net)}</span>`:'—';
+    const pC=row.netPct!==null?`<span style="font-size:11px;font-weight:500;color:${row.netPct>=0?'var(--green)':'var(--red)'};">${row.netPct>=0?'+':''}${row.netPct.toFixed(2)}%</span>`:'—';
+    tr.innerHTML=`<td style="font-weight:500;">${row.day}</td><td style="font-size:11px;color:var(--text2);">${row.date}</td><td>${fmt(row.opening)}</td><td><span class="badge ${row.rate===getR1()?'bw':'bs'}">${fmtR(row.rate)}</span></td><td style="color:var(--green);font-weight:500;">${fmt(row.target)}</td><td>${gpC}</td><td>${lC}</td><td>${bC}</td><td>${nC}</td><td>${pC}</td><td style="font-weight:500;">${net!==null?fmt(row.closing):fmt(row.opening)}</td><td><span class="badge ${bc}">${badge}</span></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -487,45 +437,26 @@ function renderChart(rows){
   const actual=rows.map(r=>r.locked?r.closing:(r.isToday&&r.net!==null?r.closing:null));
   const target=rows.map(r=>r.closing);
   if(chart)chart.destroy();
-  chart=new Chart(g('gc').getContext('2d'),{type:'line',
-    data:{labels,datasets:[
-      {label:'Actual',data:actual,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.3,pointRadius:3,pointBackgroundColor:'#1D9E75',borderWidth:2,spanGaps:false},
-      {label:'Path',data:target,borderColor:'#378ADD',borderDash:[4,4],backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:2,pointBackgroundColor:'#378ADD',borderWidth:1.5}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'₹'+Math.round(c.parsed.y).toLocaleString('en-IN')}}},
-      scales:{
-        y:{ticks:{callback:v=>'₹'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:10},color:'#888'},grid:{color:'rgba(128,128,128,0.1)'}},
-        x:{ticks:{font:{size:10},color:'#888',maxTicksLimit:14},grid:{display:false}}
-      }
-    }
-  });
+  chart=new Chart(g('gc').getContext('2d'),{type:'line',data:{labels,datasets:[{label:'Actual',data:actual,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.3,pointRadius:3,pointBackgroundColor:'#1D9E75',borderWidth:2,spanGaps:false},{label:'Path',data:target,borderColor:'#378ADD',borderDash:[4,4],backgroundColor:'transparent',fill:false,tension:0.3,pointRadius:2,pointBackgroundColor:'#378ADD',borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'₹'+Math.round(c.parsed.y).toLocaleString('en-IN')}}},scales:{y:{ticks:{callback:v=>'₹'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:10},color:'#888'},grid:{color:'rgba(128,128,128,0.1)'}},x:{ticks:{font:{size:10},color:'#888',maxTicksLimit:14},grid:{display:false}}}}});
 }
 
 function lockDay(){
-  const profit=getProfit(),loss=getLoss(),net=profit-loss;
-  locked.push({profit,loss,net});
-  g('todayProfit').value='';g('todayLoss').value='';
-  const msg=g('lmsg');
-  msg.textContent='Day '+locked.length+' locked! Net: '+(net>=0?'+':'')+fmt(net);
-  setTimeout(()=>msg.textContent='',3000);
-  recalc();
+  const gross=getProfit(),loss=getLoss(),brok=getBrok(),net=gross-loss-brok;
+  locked.push({grossProfit:gross,loss,brokerage:brok,net});
+  g('todayProfit').value='';g('todayLoss').value='';g('todayBrok').value='';
+  const msg=g('lmsg');msg.textContent='Day '+locked.length+' locked! Net: '+(net>=0?'+':'')+fmt(net);
+  setTimeout(()=>msg.textContent='',3000);recalc();
 }
 
 function exportCSV(){
   const rows=buildRows();
-  const lines=[['Day','Date','Opening','Rate %','Target','Profit','Loss','Net','Closing','Type'].join(',')];
+  const lines=[['Day','Date','Opening','Rate %','Target','Gross Profit','Loss','Brokerage','Net P&L','Net %','Closing','Type'].join(',')];
   rows.forEach(r=>{
     const type=r.locked?'Locked':r.isToday?'Today':'Projected';
-    lines.push([r.day,r.date,Math.round(r.opening),(r.rate*100).toFixed(1),Math.round(r.target),
-      r.profit!==null?Math.round(r.profit):'',r.loss!==null?Math.round(r.loss):'',
-      r.net!==null?Math.round(r.net):'',Math.round(r.closing),type].join(','));
+    lines.push([r.day,r.date,Math.round(r.opening),(r.rate*100).toFixed(1),Math.round(r.target),r.grossProfit!==null?Math.round(r.grossProfit):'',r.loss!==null?Math.round(r.loss):'',r.brokerage!==null?r.brokerage.toFixed(2):'',r.net!==null?Math.round(r.net):'',r.netPct!==null?r.netPct.toFixed(2)+'%':'',Math.round(r.closing),type].join(','));
   });
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));
-  a.download='trading_tracker.csv';a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));a.download='trading_tracker.csv';a.click();
 }
-
 recalc();
 </script>
 </body>
